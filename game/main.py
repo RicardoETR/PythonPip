@@ -1,89 +1,45 @@
 import random
 
-def choose_options():
-  options = ('piedra', 'papel', 'tijera')
-  user_option = input('👊 piedra, 🖐 papel o ✌ tijera => ')
-  user_option = user_option.lower()  
-  
-  if not user_option in options:
-    print('Esa opción no es válida')
-    #continue 
-    #exit() #buen tip de los comentarios
-    return None, None
-  
-  computer_option = random.choice(options) #tambien podemos usar una lista en lugar de una tupla
-  return user_option, computer_option
-  
-  print('    User option =>', user_option)
-  print('Computer option =>', computer_option)
-
-def check_rules(user_option, computer_option, user_wins, computers_wins):
-  if user_option == computer_option:
-    print('*' * 16)
-    print('*   EMPATE   *')
-    print('*' * 16)
-  elif user_option == 'piedra':
-    if computer_option == 'tijera':
-      print('piedra gana a tijera')
-      print('*' * 16)
-      print('* USUARIO GANO *')
-      print('*' * 16)
-      user_wins += 1
+#funcion para cambiar el formato de entrada 
+def optionFormat(optionUser):
+    if int(optionUser) == 1:
+        return 'piedra'
+    elif int(optionUser) == 2:
+        return 'papel'
+    elif int(optionUser) == 3:
+        return 'tijeras'
     else:
-      print('papel le gana a piedra')
-      print('*' * 19)
-      print('* COMPUTADORA GANO *')
-      print('*' * 19)
-      computers_wins += 1
-  elif user_option == 'papel':
-    if computer_option == 'piedra':
-      print('papel le gana a piedra')
-      print('*' * 16)
-      print('* USUARIO GANO *')
-      print('*' * 16)
-      user_wins += 1
-    else:
-      print('tijera gana a papel')
-      print('*' * 19)
-      print('* COMPUTADORA GANO *')
-      print('*' * 19)
-      computers_wins += 1
-  elif user_option == 'tijera':
-    if computer_option == 'papel':
-      print('tijera gana a papel')
-      print('*' * 16)
-      print('* USUARIO GANO *')
-      print('*' * 16)
-      user_wins += 1
-    else:
-      print('piedra gana a tijera')
-      print('*' * 19)
-      print('* COMPUTADORA GANO *')
-      print('*' * 19)
-      computers_wins += 1
-  return user_wins, computers_wins
+        return optionUser
 
-def run_game():
-  computers_wins = 0
-  user_wins = 0
-  rounds = 1
-  while True:  
-    #print('*' * 10)
-    print('ROUND =>', rounds)
-    #print('*' * 10)
-  
-    print('COMPUTADORA: ', computers_wins)
-    print('    USUARIO: ', user_wins)
-    rounds += 1
-  
-    user_option, computer_option = choose_options()
-    user_wins, computers_wins = check_rules(user_option, computer_option, user_wins, computers_wins)  
-    
-    if computers_wins == 2:
-      print('------------LA COMPUTADORA GANO--------------')
-      break
-    if user_wins == 2:
-      print('-----------------TU GANASTE------------------')
-      break
+#funcion para escoger entre piedra papel o tijeras
+def chooseOptions():
+    options = ('piedra', 'papel', 'tijeras')
+    optionComputer = random.choice(options)
+    optionUser = input('1.-piedra, 2.-papel o 3.-tijeras:\n').lower()
+    return(optionComputer, optionFormat(optionUser))
 
-run_game()
+#funcion de procesamiento de reglas
+def rulesGame(optionComputer, optionUser): 
+    if optionUser == optionComputer:
+        return 0,0
+    elif ((optionUser == 'tijeras' and optionComputer == 'papel') or
+        (optionUser == 'papel' and optionComputer == 'piedra') or
+        (optionUser == 'piedra' and optionComputer == 'tijeras')):
+        return 0,1
+    else:
+        return 1,0
+
+#funcion para ejecutar el juego, el main
+def runGame():
+    scoreComputer, scoreUser = 0,0
+    print('Juego de Priedra Papel o Tijeras')
+    optionComputer, optionUser = chooseOptions()
+    scoreComputer, scoreUser = rulesGame(optionComputer, optionUser)
+    if scoreComputer == scoreUser:
+        print('EMPATE')
+    elif scoreUser > scoreComputer:
+        print('Gana Usuario')
+    else:
+        print('Gana Computador')
+    print(f"Score Computer: {scoreComputer} and Score User: {scoreUser}")
+runGame()
